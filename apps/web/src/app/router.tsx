@@ -6,6 +6,7 @@ import { ShiftsPage } from '@/pages/admin/ShiftsPage';
 import { MachinesPage } from '@/pages/machines/MachinesPage';
 import { EvidencePage } from '@/pages/evidence/EvidencePage';
 import { WorkRecordForm } from '@/pages/evidence/forms/WorkRecordForm';
+import { DashboardPage } from '@/pages/dashboard/DashboardPage';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuthStore } from '@/stores/auth.store';
 
@@ -31,7 +32,7 @@ export const router = createBrowserRouter([
   {
     element: <ProtectedRoute />,
     children: [
-      { path: '/', element: <div>Dashboard (coming in Task 13)</div> },
+      { path: '/', element: <DashboardPage /> },
       { path: '/evidence', element: <EvidencePage /> },
       { path: '/evidence/new', element: <WorkRecordForm /> },
       { path: '/evidence/:id/edit', element: <WorkRecordForm /> },

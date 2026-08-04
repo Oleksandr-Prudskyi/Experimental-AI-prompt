@@ -13,6 +13,7 @@ import { TeamsModule } from './modules/teams/teams.module';
 import { ShiftsModule } from './modules/shifts/shifts.module';
 import { WorkRecordsModule } from './modules/work-records/work-records.module';
 import { CommentsModule } from './modules/comments/comments.module';
+import { StatisticsModule } from './modules/statistics/statistics.module';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
@@ -29,6 +30,7 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
     ShiftsModule,
     WorkRecordsModule,
     CommentsModule,
+    StatisticsModule,
   ],
   controllers: [AppController],
   providers: [
