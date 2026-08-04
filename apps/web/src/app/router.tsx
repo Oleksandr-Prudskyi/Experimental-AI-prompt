@@ -1,11 +1,12 @@
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import { LoginPage } from '@/pages/auth/LoginPage';
+import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuthStore } from '@/stores/auth.store';
 
 function ProtectedRoute() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   if (!isAuthenticated) return <Navigate to="/login" replace />;
-  return <Outlet />;
+  return <AppLayout />;
 }
 
 function GuestRoute() {
@@ -24,7 +25,14 @@ export const router = createBrowserRouter([
   {
     element: <ProtectedRoute />,
     children: [
-      { path: '/', element: <div className="p-8 text-2xl">Dashboard (Phase 1)</div> },
+      { path: '/', element: <div>Dashboard (coming in Task 13)</div> },
+      { path: '/evidence', element: <div>Evidence (coming in Task 12)</div> },
+      { path: '/machines', element: <div>Machines (coming in Task 10)</div> },
+      { path: '/admin/users', element: <div>Users (coming in Task 8)</div> },
+      { path: '/admin/workshops', element: <div>Workshops (coming in Task 10)</div> },
+      { path: '/admin/shifts', element: <div>Shifts (coming in Task 10)</div> },
+      { path: '/admin/audit', element: <div>Audit (coming in Task 14)</div> },
+      { path: '/admin/trash', element: <div>Trash (coming in Task 15)</div> },
     ],
   },
 ]);
