@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import { LoginPage } from '@/pages/auth/LoginPage';
+import { UsersPage } from '@/pages/admin/UsersPage';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuthStore } from '@/stores/auth.store';
 
@@ -28,7 +29,7 @@ export const router = createBrowserRouter([
       { path: '/', element: <div>Dashboard (coming in Task 13)</div> },
       { path: '/evidence', element: <div>Evidence (coming in Task 12)</div> },
       { path: '/machines', element: <div>Machines (coming in Task 10)</div> },
-      { path: '/admin/users', element: <div>Users (coming in Task 8)</div> },
+      { path: '/admin/users', element: <UsersPage /> },
       { path: '/admin/workshops', element: <div>Workshops (coming in Task 10)</div> },
       { path: '/admin/shifts', element: <div>Shifts (coming in Task 10)</div> },
       { path: '/admin/audit', element: <div>Audit (coming in Task 14)</div> },
