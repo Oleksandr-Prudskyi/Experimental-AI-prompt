@@ -11,6 +11,8 @@ import { ProductionLinesModule } from './modules/production-lines/production-lin
 import { MachinesModule } from './modules/machines/machines.module';
 import { TeamsModule } from './modules/teams/teams.module';
 import { ShiftsModule } from './modules/shifts/shifts.module';
+import { WorkRecordsModule } from './modules/work-records/work-records.module';
+import { CommentsModule } from './modules/comments/comments.module';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
@@ -25,6 +27,8 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
     MachinesModule,
     TeamsModule,
     ShiftsModule,
+    WorkRecordsModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [
