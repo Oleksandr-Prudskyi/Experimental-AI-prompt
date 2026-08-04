@@ -15,6 +15,7 @@ import { WorkRecordsModule } from './modules/work-records/work-records.module';
 import { CommentsModule } from './modules/comments/comments.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
 import { AuditLogModule } from './modules/audit-log/audit-log.module';
+import { TrashModule } from './modules/trash/trash.module';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { AuditInterceptor } from './common/interceptors/audit.interceptor';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
@@ -34,6 +35,7 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
     CommentsModule,
     StatisticsModule,
     AuditLogModule,
+    TrashModule,
   ],
   controllers: [AppController],
   providers: [
