@@ -14,7 +14,9 @@ import { ShiftsModule } from './modules/shifts/shifts.module';
 import { WorkRecordsModule } from './modules/work-records/work-records.module';
 import { CommentsModule } from './modules/comments/comments.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
+import { AuditLogModule } from './modules/audit-log/audit-log.module';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
+import { AuditInterceptor } from './common/interceptors/audit.interceptor';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 @Module({
@@ -31,11 +33,13 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
     WorkRecordsModule,
     CommentsModule,
     StatisticsModule,
+    AuditLogModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
     { provide: APP_INTERCEPTOR, useClass: ResponseInterceptor },
+    { provide: APP_INTERCEPTOR, useClass: AuditInterceptor },
     { provide: APP_FILTER, useClass: HttpExceptionFilter },
   ],
 })

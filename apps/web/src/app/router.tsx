@@ -7,6 +7,7 @@ import { MachinesPage } from '@/pages/machines/MachinesPage';
 import { EvidencePage } from '@/pages/evidence/EvidencePage';
 import { WorkRecordForm } from '@/pages/evidence/forms/WorkRecordForm';
 import { DashboardPage } from '@/pages/dashboard/DashboardPage';
+import { AuditLogPage } from '@/pages/admin/AuditLogPage';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuthStore } from '@/stores/auth.store';
 
@@ -40,7 +41,7 @@ export const router = createBrowserRouter([
       { path: '/admin/users', element: <UsersPage /> },
       { path: '/admin/workshops', element: <WorkshopsPage /> },
       { path: '/admin/shifts', element: <ShiftsPage /> },
-      { path: '/admin/audit', element: <div>Audit (coming in Task 14)</div> },
+      { path: '/admin/audit', element: <AuditLogPage /> },
       { path: '/admin/trash', element: <div>Trash (coming in Task 15)</div> },
     ],
   },
