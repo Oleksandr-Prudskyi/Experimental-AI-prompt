@@ -12,11 +12,15 @@
   },
   "dependencies": {
     "@evidence/shared": "workspace:^",
+    "@hookform/resolvers": "^5.7.1",
     "@tanstack/react-query": "^5.101.4",
     "axios": "^1.19.0",
+    "clsx": "^2.1.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "react-hook-form": "^7.84.0",
     "react-router-dom": "^7.18.2",
+    "tailwind-merge": "^3.6.0",
     "zustand": "^5.0.14"
   },
   "devDependencies": {
