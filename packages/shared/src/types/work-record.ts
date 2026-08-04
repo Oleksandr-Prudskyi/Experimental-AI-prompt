@@ -23,7 +23,7 @@ export interface WorkRecord {
   machine?: import('./machine').Machine;
   line?: import('./machine').ProductionLine;
   shift?: Shift;
-  comments?: Comment[];
+  comments?: import('./comment').Comment[];
   createdAt: string;
   updatedAt: string;
 }
