@@ -6,6 +6,11 @@ import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
+import { WorkshopsModule } from './modules/workshops/workshops.module';
+import { ProductionLinesModule } from './modules/production-lines/production-lines.module';
+import { MachinesModule } from './modules/machines/machines.module';
+import { TeamsModule } from './modules/teams/teams.module';
+import { ShiftsModule } from './modules/shifts/shifts.module';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
@@ -15,6 +20,11 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
     PrismaModule,
     AuthModule,
     UsersModule,
+    WorkshopsModule,
+    ProductionLinesModule,
+    MachinesModule,
+    TeamsModule,
+    ShiftsModule,
   ],
   controllers: [AppController],
   providers: [
