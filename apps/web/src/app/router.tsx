@@ -1,6 +1,9 @@
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { UsersPage } from '@/pages/admin/UsersPage';
+import { WorkshopsPage } from '@/pages/admin/WorkshopsPage';
+import { ShiftsPage } from '@/pages/admin/ShiftsPage';
+import { MachinesPage } from '@/pages/machines/MachinesPage';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuthStore } from '@/stores/auth.store';
 
@@ -28,10 +31,10 @@ export const router = createBrowserRouter([
     children: [
       { path: '/', element: <div>Dashboard (coming in Task 13)</div> },
       { path: '/evidence', element: <div>Evidence (coming in Task 12)</div> },
-      { path: '/machines', element: <div>Machines (coming in Task 10)</div> },
+      { path: '/machines', element: <MachinesPage /> },
       { path: '/admin/users', element: <UsersPage /> },
-      { path: '/admin/workshops', element: <div>Workshops (coming in Task 10)</div> },
-      { path: '/admin/shifts', element: <div>Shifts (coming in Task 10)</div> },
+      { path: '/admin/workshops', element: <WorkshopsPage /> },
+      { path: '/admin/shifts', element: <ShiftsPage /> },
       { path: '/admin/audit', element: <div>Audit (coming in Task 14)</div> },
       { path: '/admin/trash', element: <div>Trash (coming in Task 15)</div> },
     ],
