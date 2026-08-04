@@ -1,0 +1,338 @@
+// apps/api/prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── ENUMS ───
+
+enum RoleSlug {
+  administrator
+  mistr
+  serizovac
+  vedouci_vyroby
+}
+
+enum PermissionEnum {
+  records_create        @map("records.create")
+  records_edit_all      @map("records.edit_all")
+  records_delete        @map("records.delete")
+  machines_manage       @map("machines.manage")
+  workshops_manage      @map("workshops.manage")
+  teams_manage          @map("teams.manage")
+  users_manage          @map("users.manage")
+  users_grant_permissions @map("users.grant_permissions")
+  announcements_manage  @map("announcements.manage")
+  chat_create_channel   @map("chat.create_channel")
+  statistics_view_all   @map("statistics.view_all")
+  reports_generate      @map("reports.generate")
+  audit_view            @map("audit.view")
+  settings_manage       @map("settings.manage")
+  trash_restore         @map("trash.restore")
+}
+
+enum WorkRecordCategory {
+  failure
+  maintenance
+  adjustment
+  cleaning
+  inspection
+  machine_setup
+  other
+}
+
+enum Priority {
+  low
+  medium
+  high
+  critical
+}
+
+enum WorkRecordStatus {
+  draft
+  open
+  in_progress
+  resolved
+  closed
+}
+
+enum MachineStatus {
+  operational
+  maintenance
+  breakdown
+  decommissioned
+}
+
+enum AuditAction {
+  create
+  update
+  delete
+  restore
+  login
+  logout
+}
+
+// ─── MODELS ───
+
+model Role {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String
+  slug        RoleSlug @unique
+  description String?
+  isSystem    Boolean  @default(true) @map("is_system")
+  users       User[]
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("roles")
+}
+
+model User {
+  id            String    @id @default(uuid()) @db.Uuid
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  fullName      String    @map("full_name")
+  avatarUrl     String?   @map("avatar_url")
+  phone         String?
+  position      String?
+  isActive      Boolean   @default(true) @map("is_active")
+  roleId        String    @map("role_id") @db.Uuid
+  workshopId    String?   @map("workshop_id") @db.Uuid
+  deletedAt     DateTime? @map("deleted_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  role                Role              @relation(fields: [roleId], references: [id])
+  workshop            Workshop?         @relation(fields: [workshopId], references: [id])
+  permissions         UserPermission[]  @relation("UserPermissions")
+  grantedPermissions  UserPermission[]  @relation("GrantedPermissions")
+  workRecords         WorkRecord[]
+  workRecordTemplates WorkRecordTemplate[]
+  comments            Comment[]
+  auditLogs           AuditLog[]
+  machineResponsibles MachineResponsible[]
+  teamMembers         TeamMember[]
+
+  @@index([email])
+  @@index([roleId])
+  @@index([workshopId])
+  @@map("users")
+}
+
+model UserPermission {
+  id         String         @id @default(uuid()) @db.Uuid
+  userId     String         @map("user_id") @db.Uuid
+  permission PermissionEnum
+  grantedBy  String         @map("granted_by") @db.Uuid
+  createdAt  DateTime       @default(now()) @map("created_at")
+
+  user    User @relation("UserPermissions", fields: [userId], references: [id])
+  granter User @relation("GrantedPermissions", fields: [grantedBy], references: [id])
+
+  @@unique([userId, permission])
+  @@map("user_permissions")
+}
+
+model Workshop {
+  id              String           @id @default(uuid()) @db.Uuid
+  name            String
+  code            String           @unique
+  description     String?
+  deletedAt       DateTime?        @map("deleted_at")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+
+  users           User[]
+  productionLines ProductionLine[]
+  teams           Team[]
+
+  @@map("workshops")
+}
+
+model ProductionLine {
+  id          String    @id @default(uuid()) @db.Uuid
+  workshopId  String    @map("workshop_id") @db.Uuid
+  name        String
+  code        String?
+  deletedAt   DateTime? @map("deleted_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  workshop    Workshop  @relation(fields: [workshopId], references: [id])
+  machines    Machine[]
+  workRecords WorkRecord[]
+
+  @@map("production_lines")
+}
+
+model Machine {
+  id              String        @id @default(uuid()) @db.Uuid
+  lineId          String        @map("line_id") @db.Uuid
+  name            String
+  code            String        @unique
+  description     String?
+  photoUrl        String?       @map("photo_url")
+  status          MachineStatus @default(operational)
+  commissionedAt  DateTime?     @map("commissioned_at")
+  deletedAt       DateTime?     @map("deleted_at")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  line            ProductionLine       @relation(fields: [lineId], references: [id])
+  responsibles    MachineResponsible[]
+  workRecords     WorkRecord[]
+
+  @@map("machines")
+}
+
+model MachineResponsible {
+  machineId String   @map("machine_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  role      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  machine Machine @relation(fields: [machineId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@id([machineId, userId])
+  @@map("machine_responsibles")
+}
+
+model Team {
+  id          String    @id @default(uuid()) @db.Uuid
+  name        String
+  workshopId  String    @map("workshop_id") @db.Uuid
+  deletedAt   DateTime? @map("deleted_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  workshop Workshop     @relation(fields: [workshopId], references: [id])
+  members  TeamMember[]
+
+  @@map("teams")
+}
+
+model TeamMember {
+  teamId    String   @map("team_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  team Team @relation(fields: [teamId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@id([teamId, userId])
+  @@map("team_members")
+}
+
+model Shift {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  startTime String   @map("start_time")
+  endTime   String   @map("end_time")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  workRecords WorkRecord[]
+
+  @@map("shifts")
+}
+
+model WorkRecord {
+  id               String             @id @default(uuid()) @db.Uuid
+  authorId         String             @map("author_id") @db.Uuid
+  machineId        String             @map("machine_id") @db.Uuid
+  lineId           String             @map("line_id") @db.Uuid
+  shiftId          String?            @map("shift_id") @db.Uuid
+  category         WorkRecordCategory
+  date             DateTime           @db.Date
+  startTime        String             @map("start_time")
+  endTime          String?            @map("end_time")
+  durationMin      Int?               @map("duration_min")
+  description      String
+  downtimeMin      Int?               @map("downtime_min")
+  cause            String?
+  maintenanceDone  String?            @map("maintenance_done")
+  replacedParts    String?            @map("replaced_parts")
+  requiredParts    String?            @map("required_parts")
+  recommendations  String?
+  priority         Priority           @default(medium)
+  status           WorkRecordStatus   @default(open)
+  isDraft          Boolean            @default(false) @map("is_draft")
+  deletedAt        DateTime?          @map("deleted_at")
+  createdAt        DateTime           @default(now()) @map("created_at")
+  updatedAt        DateTime           @updatedAt @map("updated_at")
+
+  author  User           @relation(fields: [authorId], references: [id])
+  machine Machine        @relation(fields: [machineId], references: [id])
+  line    ProductionLine @relation(fields: [lineId], references: [id])
+  shift   Shift?         @relation(fields: [shiftId], references: [id])
+
+  @@index([date, machineId, authorId, category])
+  @@index([authorId])
+  @@index([machineId])
+  @@map("work_records")
+}
+
+model WorkRecordTemplate {
+  id            String             @id @default(uuid()) @db.Uuid
+  authorId      String             @map("author_id") @db.Uuid
+  name          String
+  category      WorkRecordCategory
+  machineId     String?            @map("machine_id") @db.Uuid
+  description   String?
+  defaultValues Json               @default("{}") @map("default_values")
+  createdAt     DateTime           @default(now()) @map("created_at")
+
+  author User @relation(fields: [authorId], references: [id])
+
+  @@map("work_record_templates")
+}
+
+model Comment {
+  id         String    @id @default(uuid()) @db.Uuid
+  authorId   String    @map("author_id") @db.Uuid
+  entityType String    @map("entity_type")
+  entityId   String    @map("entity_id") @db.Uuid
+  content    String
+  deletedAt  DateTime? @map("deleted_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  author User @relation(fields: [authorId], references: [id])
+
+  @@index([entityType, entityId])
+  @@map("comments")
+}
+
+model AuditLog {
+  id         String      @id @default(uuid()) @db.Uuid
+  userId     String      @map("user_id") @db.Uuid
+  action     AuditAction
+  entityType String      @map("entity_type")
+  entityId   String      @map("entity_id") @db.Uuid
+  oldValue   Json?       @map("old_value")
+  newValue   Json?       @map("new_value")
+  metadata   Json?
+  createdAt  DateTime    @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([entityType, entityId, createdAt])
+  @@index([userId, createdAt])
+  @@map("audit_logs")
+}
+
+model Setting {
+  id        String   @id @default(uuid()) @db.Uuid
+  key       String   @unique
+  value     Json
+  updatedBy String?  @map("updated_by") @db.Uuid
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
+}
