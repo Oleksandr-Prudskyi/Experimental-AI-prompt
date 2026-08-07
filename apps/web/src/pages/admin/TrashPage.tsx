@@ -18,7 +18,7 @@ const entityLabels: Record<string, string> = {
   comment: 'Komentáře',
 };
 
-function getItemLabel(entityType: string, item: any): string {
+function getItemLabel(_entityType: string, item: any): string {
   return item.fullName || item.name || item.description?.slice(0, 60) || item.content?.slice(0, 60) || item.id;
 }
 
@@ -56,7 +56,7 @@ export function TrashPage() {
       <PageHeader title="Koš" subtitle="Smazané položky" />
 
       {groups.length === 0 && !isLoading ? (
-        <EmptyState icon="🗑️" title="Koš je prázdný" description="Žádné smazané položky" />
+        <EmptyState icon="trash" title="Koš je prázdný" description="Žádné smazané položky" />
       ) : (
         groups.map((group: any, gi: number) => (
           <GlassCard key={group.entityType} hover={false} className="animate-fade-in-up" style={{ animationDelay: `${gi * 100}ms` }}>

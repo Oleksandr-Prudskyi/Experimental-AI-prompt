@@ -20,8 +20,8 @@ export function WorkRecordForm() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting } } = useForm<CreateWorkRecordInput>({
-    resolver: zodResolver(createWorkRecordSchema),
+  const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting } } = useForm({
+    resolver: zodResolver(createWorkRecordSchema) as any,
     defaultValues: {
       date: new Date().toISOString().split('T')[0],
       priority: 'medium',
@@ -80,7 +80,7 @@ export function WorkRecordForm() {
   }, [existingRecord, reset]);
 
   const mutation = useMutation({
-    mutationFn: (data: CreateWorkRecordInput) =>
+    mutationFn: (data: any) =>
       isEdit ? workRecordsApi.update(id!, data) : workRecordsApi.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['work-records'] });
@@ -88,7 +88,7 @@ export function WorkRecordForm() {
     },
   });
 
-  const onSubmit = (data: CreateWorkRecordInput) => {
+  const onSubmit = (data: any) => {
     mutation.mutate(data);
   };
 
