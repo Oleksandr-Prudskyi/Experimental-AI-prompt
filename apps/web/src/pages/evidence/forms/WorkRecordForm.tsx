@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { createWorkRecordSchema, type CreateWorkRecordInput } from '@evidence/shared';
+import { createWorkRecordSchema } from '@evidence/shared';
 import { workRecordsApi } from '@/api/work-records';
 import { machinesApi } from '@/api/machines';
 import { productionLinesApi } from '@/api/workshops';
@@ -20,7 +20,7 @@ export function WorkRecordForm() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting } } = useForm({
+  const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting } } = useForm<any>({
     resolver: zodResolver(createWorkRecordSchema) as any,
     defaultValues: {
       date: new Date().toISOString().split('T')[0],
@@ -81,7 +81,7 @@ export function WorkRecordForm() {
 
   const mutation = useMutation({
     mutationFn: (data: any) =>
-      isEdit ? workRecordsApi.update(id!, data) : workRecordsApi.create(data),
+      (isEdit ? workRecordsApi.update(id!, data) : workRecordsApi.create(data)) as any,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['work-records'] });
       navigate('/evidence');

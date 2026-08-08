@@ -1,6 +1,7 @@
+import type { ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 
-const ICONS: Record<string, JSX.Element> = {
+const ICONS: Record<string, ReactNode> = {
   // -- Navigation (24px line, currentColor) --
   dashboard: (
     <>
