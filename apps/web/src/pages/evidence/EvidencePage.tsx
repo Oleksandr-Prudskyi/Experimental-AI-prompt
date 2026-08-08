@@ -67,7 +67,7 @@ export function EvidencePage() {
       <EvidenceFilters filters={filters} onChange={handleFilterChange} machines={machines} />
 
       {records.length === 0 && !isLoading ? (
-        <EmptyState icon="📋" title="Žádné záznamy" description="Vytvořte první pracovní záznam" />
+        <EmptyState icon="evidence" title="Žádné záznamy" description="Vytvořte první pracovní záznam" />
       ) : (
         <>
           {/* region: desktop table */}

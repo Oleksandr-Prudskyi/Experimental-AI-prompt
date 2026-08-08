@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { usePermissions } from '@/hooks/usePermissions';
 import { PERMISSIONS } from '@evidence/shared';
 import { cn } from '@/lib/cn';
+import { Icon } from '@/components/shared/Icon';
 
 interface NavItem {
   label: string;
@@ -14,19 +15,19 @@ const NAV_SECTIONS: { title: string; items: NavItem[] }[] = [
   {
     title: 'Hlavní',
     items: [
-      { label: 'Dashboard', path: '/', icon: '📊' },
-      { label: 'Evidence práce', path: '/evidence', icon: '📋' },
-      { label: 'Stroje', path: '/machines', icon: '⚙️' },
+      { label: 'Dashboard', path: '/', icon: 'dashboard' },
+      { label: 'Evidence práce', path: '/evidence', icon: 'evidence' },
+      { label: 'Stroje', path: '/machines', icon: 'machines' },
     ],
   },
   {
     title: 'Správa',
     items: [
-      { label: 'Uživatelé', path: '/admin/users', icon: '👤', permission: PERMISSIONS.USERS_MANAGE },
-      { label: 'Dílny / Týmy', path: '/admin/workshops', icon: '🏭', permission: PERMISSIONS.WORKSHOPS_MANAGE },
-      { label: 'Směny', path: '/admin/shifts', icon: '🕐', permission: PERMISSIONS.SETTINGS_MANAGE },
-      { label: 'Audit log', path: '/admin/audit', icon: '📜', permission: PERMISSIONS.AUDIT_VIEW },
-      { label: 'Koš', path: '/admin/trash', icon: '🗑️', permission: PERMISSIONS.TRASH_RESTORE },
+      { label: 'Uživatelé', path: '/admin/users', icon: 'users', permission: PERMISSIONS.USERS_MANAGE },
+      { label: 'Dílny / Týmy', path: '/admin/workshops', icon: 'workshops', permission: PERMISSIONS.WORKSHOPS_MANAGE },
+      { label: 'Směny', path: '/admin/shifts', icon: 'shifts', permission: PERMISSIONS.SETTINGS_MANAGE },
+      { label: 'Audit log', path: '/admin/audit', icon: 'audit', permission: PERMISSIONS.AUDIT_VIEW },
+      { label: 'Koš', path: '/admin/trash', icon: 'trash', permission: PERMISSIONS.TRASH_RESTORE },
     ],
   },
 ];
@@ -61,7 +62,7 @@ export function SidebarNav() {
                   )
                 }
               >
-                <span className="text-base">{item.icon}</span>
+                <Icon name={item.icon} size={18} />
                 {item.label}
               </NavLink>
             ))}

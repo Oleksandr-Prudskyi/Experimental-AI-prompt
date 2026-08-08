@@ -33,7 +33,7 @@ export function WorkshopsPage() {
       <PageHeader title="Dílny a výrobní linky" subtitle={`${workshops.length} dílen`} />
 
       {workshops.length === 0 ? (
-        <EmptyState icon="🏭" title="Žádné dílny" description="Vytvořte první dílnu" />
+        <EmptyState icon="workshops" title="Žádné dílny" description="Vytvořte první dílnu" />
       ) : (
         <div className="flex flex-col gap-4">
           {workshops.map((workshop: any, i: number) => (

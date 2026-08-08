@@ -8,6 +8,9 @@ export default defineConfig({
       '@': import.meta.dirname + '/src',
     },
   },
+  optimizeDeps: {
+    include: ['@evidence/shared'],
+  },
   server: {
     port: 5173,
     proxy: {

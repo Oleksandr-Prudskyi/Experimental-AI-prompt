@@ -25,7 +25,7 @@ export function ShiftsPage() {
       <PageHeader title="Směny" subtitle={`${shifts.length} směn`} />
 
       {shifts.length === 0 ? (
-        <EmptyState icon="🕐" title="Žádné směny" description="Vytvořte první směnu" />
+        <EmptyState icon="shifts" title="Žádné směny" description="Vytvořte první směnu" />
       ) : (
         <GlassCard hover={false} className="overflow-x-auto">
           <table className="w-full text-sm">

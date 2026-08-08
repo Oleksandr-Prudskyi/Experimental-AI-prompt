@@ -69,7 +69,7 @@ export function AuditLogPage() {
       {/* endregion */}
 
       {logs.length === 0 && !isLoading ? (
-        <EmptyState icon="📜" title="Žádné záznamy" description="Zatím nejsou žádné záznamy v audit logu" />
+        <EmptyState icon="audit" title="Žádné záznamy" description="Zatím nejsou žádné záznamy v audit logu" />
       ) : (
         <GlassCard hover={false} className="overflow-x-auto animate-fade-in" style={{ animationDelay: '100ms' }}>
           <table className="w-full text-sm">

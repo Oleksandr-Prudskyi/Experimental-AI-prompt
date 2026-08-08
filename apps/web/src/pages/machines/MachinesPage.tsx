@@ -25,7 +25,7 @@ export function MachinesPage() {
       <PageHeader title="Stroje" subtitle={`${machines.length} strojů`} />
 
       {machines.length === 0 ? (
-        <EmptyState icon="⚙️" title="Žádné stroje" description="Přidejte první stroj" />
+        <EmptyState icon="machines" title="Žádné stroje" description="Přidejte první stroj" />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {machines.map((machine: any, i: number) => (

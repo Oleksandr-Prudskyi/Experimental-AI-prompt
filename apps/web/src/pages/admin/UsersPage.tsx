@@ -43,7 +43,7 @@ export function UsersPage() {
       />
 
       {users.length === 0 && !isLoading ? (
-        <EmptyState icon="👤" title="Žádní uživatelé" description="Vytvořte prvního uživatele" />
+        <EmptyState icon="users" title="Žádní uživatelé" description="Vytvořte prvního uživatele" />
       ) : (
         <GlassCard hover={false} className="overflow-x-auto">
           <table className="w-full text-sm">
