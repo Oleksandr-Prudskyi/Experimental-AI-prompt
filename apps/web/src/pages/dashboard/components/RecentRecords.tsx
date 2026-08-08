@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { GlassCard } from '@/components/shared/GlassCard';
 import { StatusBadge } from '@/components/shared/StatusBadge';
+import { EmptyState } from '@/components/shared/EmptyState';
 import { CATEGORY_LABELS } from '@evidence/shared';
 
 interface RecentRecordsProps {
@@ -11,18 +12,17 @@ export function RecentRecords({ records }: RecentRecordsProps) {
   const navigate = useNavigate();
 
   return (
-    <GlassCard hover={false} className="animate-fade-in-up" style={{ animationDelay: '300ms' }}>
-      <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-4">Poslední záznamy</h3>
+    <GlassCard hover={false}>
+      <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-4">Poslední záznamy</h3>
 
       {records.length === 0 ? (
-        <p className="text-sm text-slate-400 text-center py-6">Žádné záznamy</p>
+        <EmptyState icon="evidence" title="Žádné záznamy" />
       ) : (
-        <div className="flex flex-col divide-y divide-slate-200/30 dark:divide-slate-700/30">
-          {records.map((r: any, i: number) => (
+        <div className="flex flex-col divide-y divide-slate-100 dark:divide-slate-700/50">
+          {records.map((r: any) => (
             <div
               key={r.id}
-              className="flex items-center gap-3 py-3 cursor-pointer hover:bg-white/30 dark:hover:bg-slate-700/30 rounded-lg px-2 transition-all duration-250 animate-fade-in"
-              style={{ animationDelay: `${350 + i * 40}ms` }}
+              className="flex items-center gap-3 py-2.5 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/30 rounded-md px-2 transition-colors duration-150"
               onClick={() => navigate(`/evidence/${r.id}/edit`)}
             >
               <div className="flex-1 min-w-0">
@@ -40,7 +40,7 @@ export function RecentRecords({ records }: RecentRecordsProps) {
                 </p>
               </div>
               <div className="text-right shrink-0">
-                <p className="text-xs font-mono text-slate-400">
+                <p className="text-xs tabular-nums text-slate-400">
                   {new Date(r.createdAt).toLocaleDateString('cs-CZ')}
                 </p>
                 <p className="text-xs text-slate-400">{r.author?.fullName}</p>

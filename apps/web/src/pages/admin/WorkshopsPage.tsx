@@ -6,12 +6,13 @@ import { GlassCard } from '@/components/shared/GlassCard';
 import { GradientButton } from '@/components/shared/GradientButton';
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog';
 import { EmptyState } from '@/components/shared/EmptyState';
+import { Skeleton } from '@/components/shared/Skeleton';
 
 export function WorkshopsPage() {
   const queryClient = useQueryClient();
   const [deleteItem, setDeleteItem] = useState<any>(null);
 
-  const { data: workshopsData } = useQuery({
+  const { data: workshopsData, isLoading } = useQuery({
     queryKey: ['workshops'],
     queryFn: () => workshopsApi.list().then((r) => r.data),
   });
@@ -30,18 +31,28 @@ export function WorkshopsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title="Dílny a výrobní linky" subtitle={`${workshops.length} dílen`} />
+      <PageHeader
+        title="Dílny a výrobní linky"
+        subtitle={`${workshops.length} dílen`}
+        breadcrumbs={[{ label: 'Správa' }, { label: 'Dílny / Týmy' }]}
+      />
 
-      {workshops.length === 0 ? (
+      {isLoading ? (
+        <div className="flex flex-col gap-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} variant="card" height="120px" />
+          ))}
+        </div>
+      ) : workshops.length === 0 ? (
         <EmptyState icon="workshops" title="Žádné dílny" description="Vytvořte první dílnu" />
       ) : (
         <div className="flex flex-col gap-4">
-          {workshops.map((workshop: any, i: number) => (
-            <GlassCard key={workshop.id} hover={false} style={{ animationDelay: `${i * 50}ms` }} className="animate-fade-in">
+          {workshops.map((workshop: any) => (
+            <GlassCard key={workshop.id} hover={false}>
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{workshop.name}</h3>
-                  {workshop.code && <span className="text-xs text-slate-400 font-mono">{workshop.code}</span>}
+                  <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100">{workshop.name}</h3>
+                  {workshop.code && <span className="text-xs text-slate-400 tabular-nums">{workshop.code}</span>}
                 </div>
                 <GradientButton variant="ghost" size="sm" onClick={() => setDeleteItem({ type: 'workshop', ...workshop })}>
                   Smazat
@@ -49,7 +60,7 @@ export function WorkshopsPage() {
               </div>
 
               {workshop.productionLines?.length > 0 && (
-                <div className="ml-4 border-l-2 border-primary-200 dark:border-primary-800 pl-4 flex flex-col gap-2">
+                <div className="ml-4 border-l-2 border-blue-200 dark:border-blue-800 pl-4 flex flex-col gap-2">
                   {workshop.productionLines.map((line: any) => (
                     <div key={line.id} className="flex items-center justify-between py-1.5">
                       <span className="text-sm text-slate-600 dark:text-slate-300">{line.name}</span>

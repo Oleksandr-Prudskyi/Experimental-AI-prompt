@@ -6,6 +6,7 @@ import { GlassCard } from '@/components/shared/GlassCard';
 import { GradientButton } from '@/components/shared/GradientButton';
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog';
 import { EmptyState } from '@/components/shared/EmptyState';
+import { Skeleton } from '@/components/shared/Skeleton';
 import { useAuthStore } from '@/stores/auth.store';
 
 const entityLabels: Record<string, string> = {
@@ -53,30 +54,39 @@ export function TrashPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title="Koš" subtitle="Smazané položky" />
+      <PageHeader
+        title="Koš"
+        subtitle="Smazané položky"
+        breadcrumbs={[{ label: 'Správa' }, { label: 'Koš' }]}
+      />
 
-      {groups.length === 0 && !isLoading ? (
+      {isLoading ? (
+        <div className="flex flex-col gap-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} variant="card" height="120px" />
+          ))}
+        </div>
+      ) : groups.length === 0 ? (
         <EmptyState icon="trash" title="Koš je prázdný" description="Žádné smazané položky" />
       ) : (
-        groups.map((group: any, gi: number) => (
-          <GlassCard key={group.entityType} hover={false} className="animate-fade-in-up" style={{ animationDelay: `${gi * 100}ms` }}>
-            <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-4">
+        groups.map((group: any) => (
+          <GlassCard key={group.entityType} hover={false}>
+            <h3 className="text-base font-semibold text-slate-700 dark:text-slate-200 mb-4">
               {entityLabels[group.entityType] || group.entityType}
               <span className="ml-2 text-sm font-normal text-slate-400">({group.items.length})</span>
             </h3>
 
-            <div className="flex flex-col divide-y divide-slate-200/30 dark:divide-slate-700/30">
-              {group.items.map((item: any, i: number) => (
+            <div className="flex flex-col divide-y divide-slate-100 dark:divide-slate-700/50">
+              {group.items.map((item: any) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between py-3 animate-fade-in"
-                  style={{ animationDelay: `${gi * 100 + i * 40}ms` }}
+                  className="flex items-center justify-between py-3"
                 >
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-slate-700 dark:text-slate-200 truncate">
                       {getItemLabel(group.entityType, item)}
                     </p>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-slate-400 tabular-nums">
                       Smazáno: {new Date(item.deletedAt).toLocaleString('cs-CZ')}
                     </p>
                   </div>

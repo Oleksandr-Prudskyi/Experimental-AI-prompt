@@ -7,6 +7,7 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { GradientButton } from '@/components/shared/GradientButton';
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog';
 import { EmptyState } from '@/components/shared/EmptyState';
+import { Skeleton } from '@/components/shared/Skeleton';
 import { EvidenceFilters } from './components/EvidenceFilters';
 import { EvidenceTable } from './components/EvidenceTable';
 import { EvidenceCard } from './components/EvidenceCard';
@@ -47,6 +48,7 @@ export function EvidencePage() {
 
   const records: WorkRecord[] = data?.data || [];
   const machines = machinesData?.data || [];
+  const totalCount = data?.meta?.total ?? records.length;
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -56,7 +58,7 @@ export function EvidencePage() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title="Evidence práce"
-        subtitle={`${records.length} záznamů`}
+        subtitle={`${totalCount} záznamů`}
         actions={
           <GradientButton onClick={() => navigate('/evidence/new')}>
             + Nový záznam
@@ -66,7 +68,13 @@ export function EvidencePage() {
 
       <EvidenceFilters filters={filters} onChange={handleFilterChange} machines={machines} />
 
-      {records.length === 0 && !isLoading ? (
+      {isLoading && records.length === 0 ? (
+        <div className="flex flex-col gap-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} variant="bar" height="48px" />
+          ))}
+        </div>
+      ) : records.length === 0 ? (
         <EmptyState icon="evidence" title="Žádné záznamy" description="Vytvořte první pracovní záznam" />
       ) : (
         <>

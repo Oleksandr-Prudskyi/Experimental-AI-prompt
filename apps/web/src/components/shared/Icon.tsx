@@ -215,6 +215,21 @@ const ICONS: Record<string, ReactNode> = {
       <line x1="3" y1="10" x2="21" y2="10" />
     </>
   ),
+  'chevron-down': (
+    <polyline points="6 9 12 15 18 9" />
+  ),
+  'chevron-up': (
+    <polyline points="18 15 12 9 6 15" />
+  ),
+  copy: (
+    <>
+      <rect x="9" y="9" width="13" height="13" rx="2" />
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+    </>
+  ),
+  spinner: (
+    <path d="M12 2a10 10 0 0 1 10 10" />
+  ),
 };
 
 interface IconProps {

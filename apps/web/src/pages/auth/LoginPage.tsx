@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, type LoginInput } from '@evidence/shared';
 import { authApi } from '@/api/auth';
 import { useAuthStore } from '@/stores/auth.store';
+import { Icon } from '@/components/shared/Icon';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -30,9 +31,9 @@ export function LoginPage() {
   return (
     <div className="min-h-screen bg-app-gradient flex items-center justify-center p-4">
       <div className="w-full max-w-md animate-fade-in-up">
-        <div className="glass-card rounded-3xl p-8 shadow-xl">
+        <div className="bg-white dark:bg-slate-800 ring-1 ring-slate-200 dark:ring-slate-700 rounded-xl p-8 shadow-lg">
           <div className="flex flex-col items-center gap-2 mb-8">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary-500 to-violet-500 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold text-blue-600 dark:text-blue-400">
               Evidence
             </h1>
             <p className="text-slate-500 dark:text-slate-400 text-sm">
@@ -42,7 +43,8 @@ export function LoginPage() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
             {error && (
-              <div className="rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 p-3 text-sm text-rose-600 dark:text-rose-400 animate-scale-in">
+              <div className="rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 p-3 text-sm text-red-600 dark:text-red-400 animate-scale-in flex items-center gap-2">
+                <Icon name="warning" size={16} className="shrink-0" />
                 {error}
               </div>
             )}
@@ -54,12 +56,14 @@ export function LoginPage() {
               <input
                 id="email"
                 type="email"
+                autoFocus
+                autoComplete="email"
                 {...register('email')}
-                className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 px-4 py-2.5 text-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 outline-none"
+                className="rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm transition-colors duration-150 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 outline-none"
                 placeholder="email@evidence.local"
               />
               {errors.email && (
-                <p className="text-xs text-rose-500">{errors.email.message}</p>
+                <p className="text-xs text-red-500">{errors.email.message}</p>
               )}
             </div>
 
@@ -70,21 +74,29 @@ export function LoginPage() {
               <input
                 id="password"
                 type="password"
+                autoComplete="current-password"
                 {...register('password')}
-                className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 px-4 py-2.5 text-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 outline-none"
+                className="rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm transition-colors duration-150 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 outline-none"
                 placeholder="••••••••"
               />
               {errors.password && (
-                <p className="text-xs text-rose-500">{errors.password.message}</p>
+                <p className="text-xs text-red-500">{errors.password.message}</p>
               )}
             </div>
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mt-2 rounded-xl bg-gradient-to-r from-primary-500 to-violet-500 hover:from-primary-400 hover:to-violet-400 text-white font-medium py-2.5 shadow-md shadow-primary-500/25 transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/30 hover:scale-[1.02] active:scale-[0.98] active:duration-150 disabled:opacity-50 disabled:pointer-events-none"
+              className="mt-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 shadow-sm transition-colors duration-150 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
             >
-              {isSubmitting ? 'Přihlašování...' : 'Přihlásit se'}
+              {isSubmitting ? (
+                <>
+                  <Icon name="spinner" size={16} className="animate-spin" />
+                  Přihlašování...
+                </>
+              ) : (
+                'Přihlásit se'
+              )}
             </button>
           </form>
         </div>

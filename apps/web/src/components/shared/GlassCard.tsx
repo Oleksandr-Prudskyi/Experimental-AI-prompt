@@ -10,10 +10,9 @@ export function GlassCard({ children, hover = true, className, ...props }: Glass
   return (
     <div
       className={cn(
-        'glass-card rounded-2xl p-5',
-        'shadow-[0_4px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)]',
-        'transition-all duration-300',
-        hover && 'hover:shadow-lg hover:-translate-y-0.5 hover:bg-white/80 dark:hover:bg-slate-800/70',
+        'bg-white ring-1 ring-slate-200 dark:bg-slate-800/80 dark:ring-slate-700/50 rounded-lg p-4',
+        'transition-colors duration-150',
+        hover && 'hover:ring-slate-300 dark:hover:ring-slate-600',
         className,
       )}
       {...props}

@@ -10,6 +10,8 @@ import { productionLinesApi } from '@/api/workshops';
 import { shiftsApi } from '@/api/shifts';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { GradientButton } from '@/components/shared/GradientButton';
+import { Skeleton } from '@/components/shared/Skeleton';
+import { Icon } from '@/components/shared/Icon';
 import { BasicInfoSection } from './sections/BasicInfoSection';
 import { DescriptionSection } from './sections/DescriptionSection';
 import { DowntimeSection } from './sections/DowntimeSection';
@@ -33,7 +35,7 @@ export function WorkRecordForm() {
   const category = watch('category');
   const showDowntime = category === 'failure' || category === 'maintenance';
 
-  const { data: existingRecord } = useQuery({
+  const { data: existingRecord, isLoading: isLoadingRecord } = useQuery({
     queryKey: ['work-record', id],
     queryFn: () => workRecordsApi.get(id!).then((r) => r.data),
     enabled: isEdit,
@@ -92,11 +94,30 @@ export function WorkRecordForm() {
     mutation.mutate(data);
   };
 
+  if (isEdit && isLoadingRecord) {
+    return (
+      <div className="flex flex-col gap-6">
+        <PageHeader
+          title="Načítání..."
+          breadcrumbs={[{ label: 'Evidence práce', path: '/evidence' }, { label: 'Upravit' }]}
+        />
+        <div className="flex flex-col gap-4">
+          <Skeleton variant="card" height="200px" />
+          <Skeleton variant="card" height="120px" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
         title={isEdit ? 'Upravit záznam' : 'Nový záznam'}
         subtitle="Evidence práce"
+        breadcrumbs={[
+          { label: 'Evidence práce', path: '/evidence' },
+          { label: isEdit ? 'Upravit' : 'Nový záznam' },
+        ]}
         actions={
           <GradientButton variant="ghost" onClick={() => navigate('/evidence')}>
             Zpět na seznam
@@ -117,22 +138,28 @@ export function WorkRecordForm() {
 
         <DowntimeSection register={register} visible={showDowntime} />
 
+        {mutation.error && (
+          <div className="rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 p-3 text-sm text-red-600 dark:text-red-400 flex items-center gap-2 animate-scale-in">
+            <Icon name="warning" size={16} className="shrink-0" />
+            {(mutation.error as any)?.response?.data?.message || 'Chyba při ukládání'}
+          </div>
+        )}
+
         {/* region: form actions */}
-        <div className="flex gap-3 justify-end animate-fade-in-up" style={{ animationDelay: '400ms' }}>
+        <div className="flex gap-3 justify-end">
           <GradientButton type="button" variant="ghost" onClick={() => navigate('/evidence')}>
             Zrušit
           </GradientButton>
           <GradientButton type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Ukládám...' : isEdit ? 'Uložit změny' : 'Vytvořit záznam'}
+            {isSubmitting ? (
+              <>
+                <Icon name="spinner" size={16} className="animate-spin" />
+                Ukládám...
+              </>
+            ) : isEdit ? 'Uložit změny' : 'Vytvořit záznam'}
           </GradientButton>
         </div>
         {/* endregion */}
-
-        {mutation.error && (
-          <div className="text-sm text-red-500 text-center animate-fade-in">
-            {(mutation.error as any)?.response?.data?.message || 'Chyba při ukládání'}
-          </div>
-        )}
       </form>
     </div>
   );
