@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { chatApi } from '@/api/chat';
 import { usersApi } from '@/api/users';
 import { PageHeader } from '@/components/layout/PageHeader';
-import { GlassCard } from '@/components/shared/GlassCard';
+
 import { GradientButton } from '@/components/shared/GradientButton';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { Skeleton } from '@/components/shared/Skeleton';

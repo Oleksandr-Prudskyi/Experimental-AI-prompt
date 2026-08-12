@@ -17,6 +17,15 @@ import { ZodValidationPipe } from '../../common/pipes/zod-validation.pipe';
 import { loginSchema } from '@evidence/shared';
 import type { LoginInput } from '@evidence/shared';
 
+const isProduction = process.env.NODE_ENV === 'production';
+const cookieOptions = {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: isProduction ? 'none' as const : 'lax' as const,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+  path: '/api/v1/auth',
+};
+
 @Controller('api/v1/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -30,13 +39,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const result = await this.authService.login(req.user);
-    res.cookie('refresh_token', result.refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: '/api/v1/auth',
-    });
+    res.cookie('refresh_token', result.refreshToken, cookieOptions);
     return { accessToken: result.accessToken, user: result.user };
   }
 
@@ -54,13 +57,7 @@ export class AuthController {
       return;
     }
     const result = await this.authService.refreshTokens(token);
-    res.cookie('refresh_token', result.refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: '/api/v1/auth',
-    });
+    res.cookie('refresh_token', result.refreshToken, cookieOptions);
     return { accessToken: result.accessToken, user: result.user };
   }
 
@@ -68,7 +65,7 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   async logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('refresh_token', { path: '/api/v1/auth' });
+    res.clearCookie('refresh_token', { path: '/api/v1/auth', sameSite: cookieOptions.sameSite, secure: cookieOptions.secure });
     return { message: 'Odhlášení úspěšné' };
   }
 

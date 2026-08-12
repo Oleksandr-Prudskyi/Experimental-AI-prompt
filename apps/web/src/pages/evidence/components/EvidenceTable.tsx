@@ -39,7 +39,7 @@ export function EvidenceTable({ records, onDelete, onDuplicate }: EvidenceTableP
           </tr>
         </thead>
         <tbody>
-          {records.map((record, i) => (
+          {records.map((record) => (
             <tr
               key={record.id}
               className="border-b border-ev-100 dark:border-ev-600/20 hover:bg-ev-50 dark:hover:bg-ev-700/20 transition-colors duration-150 cursor-pointer even:bg-ev-50/50 dark:even:bg-ev-700/10"

@@ -20,7 +20,7 @@ const statusLabels: Record<string, string> = {
   closed: 'Uzavřený',
 };
 
-export function EvidenceCard({ record, index, onDelete, onDuplicate }: EvidenceCardProps) {
+export function EvidenceCard({ record, index: _index, onDelete, onDuplicate }: EvidenceCardProps) {
   const navigate = useNavigate();
 
   return (
