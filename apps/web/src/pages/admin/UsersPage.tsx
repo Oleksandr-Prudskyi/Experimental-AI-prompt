@@ -57,36 +57,38 @@ export function UsersPage() {
         <GlassCard hover={false} className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-200 dark:border-slate-700">
-                <th className="text-left py-3 px-4 font-semibold text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">Jméno</th>
-                <th className="text-left py-3 px-4 font-semibold text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">E-mail</th>
-                <th className="text-left py-3 px-4 font-semibold text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">Role</th>
-                <th className="text-left py-3 px-4 font-semibold text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">Dílna</th>
-                <th className="text-right py-3 px-4 font-semibold text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">Akce</th>
+              <tr className="border-b border-ev-200 dark:border-ev-600/40">
+                <th className="text-left py-3 px-4 font-semibold text-xs uppercase tracking-wider text-ev-500 dark:text-ev-400">Jméno</th>
+                <th className="text-left py-3 px-4 font-semibold text-xs uppercase tracking-wider text-ev-500 dark:text-ev-400">E-mail</th>
+                <th className="text-left py-3 px-4 font-semibold text-xs uppercase tracking-wider text-ev-500 dark:text-ev-400">Role</th>
+                <th className="text-left py-3 px-4 font-semibold text-xs uppercase tracking-wider text-ev-500 dark:text-ev-400">Dílna</th>
+                <th className="text-left py-3 px-4 font-semibold text-xs uppercase tracking-wider text-ev-500 dark:text-ev-400">Směna</th>
+                <th className="text-right py-3 px-4 font-semibold text-xs uppercase tracking-wider text-ev-500 dark:text-ev-400">Akce</th>
               </tr>
             </thead>
             <tbody>
               {users.map((user: any) => (
                 <tr
                   key={user.id}
-                  className="border-b border-slate-100 dark:border-slate-700/30 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors duration-150"
+                  className="border-b border-ev-100 dark:border-ev-700/30 hover:bg-ev-50 dark:hover:bg-ev-800/30 transition-colors duration-150"
                 >
-                  <td className="py-3 px-4 font-medium text-slate-800 dark:text-slate-200">{user.fullName}</td>
-                  <td className="py-3 px-4 text-slate-500 dark:text-slate-400">{user.email}</td>
+                  <td className="py-3 px-4 font-medium text-ev-800 dark:text-ev-200">{user.fullName}</td>
+                  <td className="py-3 px-4 text-ev-500 dark:text-ev-400">{user.email}</td>
                   <td className="py-3 px-4"><StatusBadge status={user.role?.slug || ''} label={user.role?.name || ''} /></td>
-                  <td className="py-3 px-4 text-slate-500 dark:text-slate-400">{user.workshop?.name || '—'}</td>
+                  <td className="py-3 px-4 text-ev-500 dark:text-ev-400">{user.workshop?.name || '—'}</td>
+                  <td className="py-3 px-4 text-ev-500 dark:text-ev-400">{user.shift?.name || '—'}</td>
                   <td className="py-3 px-4 text-right">
                     <div className="flex justify-end gap-1">
                       <button
                         onClick={() => { setEditUser(user); setShowForm(true); }}
-                        className="rounded-md p-1.5 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-blue-500 transition-colors duration-150"
+                        className="rounded-md p-1.5 hover:bg-ev-100 dark:hover:bg-ev-800 text-ev-500 hover:text-ev-700 dark:hover:text-ev-300 transition-colors duration-150"
                         title="Upravit"
                       >
                         <Icon name="edit" size={16} />
                       </button>
                       <button
                         onClick={() => setDeleteUser(user)}
-                        className="rounded-md p-1.5 hover:bg-red-50 dark:hover:bg-red-900/30 text-red-500 transition-colors duration-150"
+                        className="rounded-md p-1.5 hover:bg-st-error-muted dark:hover:bg-st-error/10 text-st-error transition-colors duration-150"
                         title="Smazat"
                       >
                         <Icon name="trash" size={16} />

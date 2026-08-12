@@ -26,8 +26,8 @@ export function WorkRecordForm() {
     resolver: zodResolver(createWorkRecordSchema) as any,
     defaultValues: {
       date: new Date().toISOString().split('T')[0],
-      priority: 'medium',
-      status: 'open',
+      priority: '',
+      status: '',
       isDraft: false,
     },
   });
@@ -65,8 +65,6 @@ export function WorkRecordForm() {
         shiftId: r.shiftId || undefined,
         category: r.category as any,
         date: r.date?.split('T')[0] || r.date,
-        startTime: r.startTime,
-        endTime: r.endTime || undefined,
         description: r.description,
         downtimeMin: r.downtimeMin ?? undefined,
         cause: r.cause || undefined,
@@ -74,8 +72,8 @@ export function WorkRecordForm() {
         replacedParts: r.replacedParts || undefined,
         requiredParts: r.requiredParts || undefined,
         recommendations: r.recommendations || undefined,
-        priority: r.priority as any,
-        status: r.status as any,
+        priority: r.priority || '',
+        status: r.status || '',
         isDraft: r.isDraft,
       });
     }
@@ -91,7 +89,11 @@ export function WorkRecordForm() {
   });
 
   const onSubmit = (data: any) => {
-    mutation.mutate(data);
+    const cleaned = { ...data };
+    if (!cleaned.priority) delete cleaned.priority;
+    if (!cleaned.status) delete cleaned.status;
+    if (!cleaned.shiftId) delete cleaned.shiftId;
+    mutation.mutate(cleaned);
   };
 
   if (isEdit && isLoadingRecord) {
@@ -139,9 +141,9 @@ export function WorkRecordForm() {
         <DowntimeSection register={register} visible={showDowntime} />
 
         {mutation.error && (
-          <div className="rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 p-3 text-sm text-red-600 dark:text-red-400 flex items-center gap-2 animate-scale-in">
+          <div className="rounded-lg bg-st-error-muted dark:bg-st-error/10 border border-st-error/20 p-3 text-sm text-st-error flex items-center gap-2 animate-scale-in">
             <Icon name="warning" size={16} className="shrink-0" />
-            {(mutation.error as any)?.response?.data?.message || 'Chyba při ukládání'}
+            {(mutation.error as any)?.response?.data?.message || 'Záznam není správně vyplněn'}
           </div>
         )}
 

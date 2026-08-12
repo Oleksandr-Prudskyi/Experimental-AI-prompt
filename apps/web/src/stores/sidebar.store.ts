@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 interface SidebarState {
   isOpen: boolean;
+  open: () => void;
   toggle: () => void;
   close: () => void;
   adminCollapsed: boolean;
@@ -14,6 +15,7 @@ const storedCollapsed = typeof window !== 'undefined'
 
 export const useSidebarStore = create<SidebarState>((set) => ({
   isOpen: false,
+  open: () => set({ isOpen: true }),
   toggle: () => set((s) => ({ isOpen: !s.isOpen })),
   close: () => set({ isOpen: false }),
   adminCollapsed: storedCollapsed,

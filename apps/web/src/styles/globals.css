@@ -1,76 +1,100 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  --color-accent-50: #eff6ff;
-  --color-accent-100: #dbeafe;
-  --color-accent-200: #bfdbfe;
-  --color-accent-300: #93c5fd;
-  --color-accent-400: #60a5fa;
-  --color-accent-500: #3b82f6;
-  --color-accent-600: #2563eb;
-  --color-accent-700: #1d4ed8;
-  --color-accent-800: #1e40af;
-  --color-accent-900: #1e3a8a;
+  --color-ev-50: #faf9f7;
+  --color-ev-100: #f0eeeb;
+  --color-ev-200: #e0ded9;
+  --color-ev-300: #c5c3bc;
+  --color-ev-400: #8e8b85;
+  --color-ev-500: #6b6862;
+  --color-ev-600: #4d4a46;
+  --color-ev-700: #363330;
+  --color-ev-800: #2c2a27;
+  --color-ev-850: #222120;
+  --color-ev-900: #171615;
+  --color-ev-950: #0d0c0b;
 
-  --color-surface-dark: #1a1d27;
-  --color-surface-dark-border: #2a2d3a;
+  --color-petrol-50: #edf4f3;
+  --color-petrol-100: #d4e5e2;
+  --color-petrol-200: #a8ccc7;
+  --color-petrol-300: #71a8a0;
+  --color-petrol-400: #52998f;
+  --color-petrol-500: #378077;
+  --color-petrol-600: #2b665f;
+  --color-petrol-700: #1e4b45;
 
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: ui-monospace, 'Cascadia Code', 'JetBrains Mono', monospace;
+  --color-st-ok: #3d8a5c;
+  --color-st-ok-muted: #edf5f0;
+  --color-st-warn: #a58830;
+  --color-st-warn-muted: #f7f3e9;
+  --color-st-error: #c04e49;
+  --color-st-error-muted: #f7edec;
+  --color-st-info: #5888af;
+  --color-st-info-muted: #edf2f7;
 
-  --animate-fade-in: fade-in 250ms ease-out forwards;
-  --animate-fade-in-up: fade-in-up 250ms ease-out forwards;
-  --animate-scale-in: scale-in 200ms ease-out forwards;
-  --animate-shimmer: shimmer 1.5s ease infinite;
-  --animate-shake: shake 400ms ease;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', ui-monospace, monospace;
+
+  --animate-fade-in: fade-in 180ms ease-out forwards;
+  --animate-fade-in-up: fade-in-up 220ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-scale-in: scale-in 180ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-shimmer: shimmer 1.8s ease infinite;
+  --animate-shake: shake 350ms ease;
+  --animate-slide-in-right: slide-in-right 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-
 @keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes scale-in {
-  from { opacity: 0; transform: scale(0.96); }
+  from { opacity: 0; transform: scale(0.97); }
   to { opacity: 1; transform: scale(1); }
 }
-
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
-
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-4px); }
-  40%, 80% { transform: translateX(4px); }
+  15% { transform: translateX(-4px); }
+  30% { transform: translateX(4px); }
+  45% { transform: translateX(-3px); }
+  60% { transform: translateX(3px); }
+  75% { transform: translateX(-1px); }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
-body {
-  font-family: var(--font-sans);
+html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 .bg-app-gradient {
-  background: #f8f9fa;
+  background: #faf9f7;
 }
-
 .dark .bg-app-gradient {
-  background: #0f1117;
+  background: #131211;
 }
 
-.glass-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+.sidebar-gradient {
+  background: #1e1d1b;
 }
 
-.dark .glass-card {
-  background: rgba(26, 29, 39, 0.8);
-  border-color: #2a2d3a;
-}
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c2c0bb; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #9a9893; }
+.dark ::-webkit-scrollbar-thumb { background: #3d3b38; }
+.dark ::-webkit-scrollbar-thumb:hover { background: #585652; }
+
+.tabular-nums { font-variant-numeric: tabular-nums; }

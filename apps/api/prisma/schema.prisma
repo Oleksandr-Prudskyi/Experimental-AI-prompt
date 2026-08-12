@@ -15,6 +15,7 @@ enum RoleSlug {
   mistr
   serizovac
   vedouci_vyroby
+  obsluha_stroje
 }
 
 enum PermissionEnum {
@@ -33,6 +34,7 @@ enum PermissionEnum {
   audit_view            @map("audit.view")
   settings_manage       @map("settings.manage")
   trash_restore         @map("trash.restore")
+  workers_transfer      @map("workers.transfer")
 }
 
 enum WorkRecordCategory {
@@ -102,12 +104,14 @@ model User {
   isActive      Boolean   @default(true) @map("is_active")
   roleId        String    @map("role_id") @db.Uuid
   workshopId    String?   @map("workshop_id") @db.Uuid
+  shiftId       String?   @map("shift_id") @db.Uuid
   deletedAt     DateTime? @map("deleted_at")
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
   role                Role              @relation(fields: [roleId], references: [id])
   workshop            Workshop?         @relation(fields: [workshopId], references: [id])
+  shift               Shift?            @relation(fields: [shiftId], references: [id])
   permissions         UserPermission[]  @relation("UserPermissions")
   grantedPermissions  UserPermission[]  @relation("GrantedPermissions")
   workRecords         WorkRecord[]
@@ -116,10 +120,15 @@ model User {
   auditLogs           AuditLog[]
   machineResponsibles MachineResponsible[]
   teamMembers         TeamMember[]
+  announcements       Announcement[]
+  createdChannels     ChatChannel[]    @relation("ChannelCreator")
+  chatMembers         ChatMember[]
+  chatMessages        ChatMessage[]    @relation("MessageAuthor")
 
   @@index([email])
   @@index([roleId])
   @@index([workshopId])
+  @@index([shiftId])
   @@map("users")
 }
 
@@ -149,6 +158,7 @@ model Workshop {
   users           User[]
   productionLines ProductionLine[]
   teams           Team[]
+  chatChannels    ChatChannel[]
 
   @@map("workshops")
 }
@@ -237,6 +247,7 @@ model Shift {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  users       User[]
   workRecords WorkRecord[]
 
   @@map("shifts")
@@ -250,7 +261,7 @@ model WorkRecord {
   shiftId          String?            @map("shift_id") @db.Uuid
   category         WorkRecordCategory
   date             DateTime           @db.Date
-  startTime        String             @map("start_time")
+  startTime        String?            @map("start_time")
   endTime          String?            @map("end_time")
   durationMin      Int?               @map("duration_min")
   description      String
@@ -335,4 +346,78 @@ model Setting {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("settings")
+}
+
+// ─── ANNOUNCEMENTS ───
+
+model Announcement {
+  id        String    @id @default(uuid()) @db.Uuid
+  authorId  String    @map("author_id") @db.Uuid
+  title     String
+  content   String
+  priority  Priority  @default(low)
+  isActive  Boolean   @default(true) @map("is_active")
+  expiresAt DateTime? @map("expires_at")
+  deletedAt DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  author User @relation(fields: [authorId], references: [id])
+
+  @@index([isActive, createdAt])
+  @@map("announcements")
+}
+
+// ─── CHAT ───
+
+enum ChannelType {
+  department
+  direct
+  group
+}
+
+model ChatChannel {
+  id          String      @id @default(uuid()) @db.Uuid
+  name        String?
+  type        ChannelType
+  workshopId  String?     @map("workshop_id") @db.Uuid
+  createdById String      @map("created_by_id") @db.Uuid
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  workshop  Workshop?       @relation(fields: [workshopId], references: [id])
+  createdBy User            @relation("ChannelCreator", fields: [createdById], references: [id])
+  members   ChatMember[]
+  messages  ChatMessage[]
+
+  @@index([type])
+  @@map("chat_channels")
+}
+
+model ChatMember {
+  channelId  String   @map("channel_id") @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  lastReadAt DateTime @default(now()) @map("last_read_at")
+  joinedAt   DateTime @default(now()) @map("joined_at")
+
+  channel ChatChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  user    User        @relation(fields: [userId], references: [id])
+
+  @@id([channelId, userId])
+  @@map("chat_members")
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid()) @db.Uuid
+  channelId String   @map("channel_id") @db.Uuid
+  authorId  String   @map("author_id") @db.Uuid
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  channel ChatChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  author  User        @relation("MessageAuthor", fields: [authorId], references: [id])
+
+  @@index([channelId, createdAt])
+  @@map("chat_messages")
 }

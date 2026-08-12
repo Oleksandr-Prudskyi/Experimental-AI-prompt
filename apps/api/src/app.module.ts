@@ -16,6 +16,8 @@ import { CommentsModule } from './modules/comments/comments.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
 import { AuditLogModule } from './modules/audit-log/audit-log.module';
 import { TrashModule } from './modules/trash/trash.module';
+import { AnnouncementsModule } from './modules/announcements/announcements.module';
+import { ChatModule } from './modules/chat/chat.module';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { AuditInterceptor } from './common/interceptors/audit.interceptor';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
@@ -36,6 +38,8 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
     StatisticsModule,
     AuditLogModule,
     TrashModule,
+    AnnouncementsModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [

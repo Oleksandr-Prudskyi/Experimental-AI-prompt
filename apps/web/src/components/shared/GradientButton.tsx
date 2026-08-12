@@ -15,9 +15,9 @@ export function GradientButton({
       className={cn(
         'inline-flex items-center justify-center gap-2 font-medium rounded-md transition-colors duration-150',
         'disabled:opacity-50 disabled:pointer-events-none',
-        variant === 'primary' && 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm',
-        variant === 'danger' && 'bg-red-600 hover:bg-red-700 text-white shadow-sm',
-        variant === 'ghost' && 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800',
+        variant === 'primary' && 'bg-ev-900 hover:bg-ev-800 text-white dark:bg-ev-100 dark:hover:bg-ev-200 dark:text-ev-900',
+        variant === 'danger' && 'bg-st-error hover:bg-st-error/90 text-white',
+        variant === 'ghost' && 'text-ev-600 dark:text-ev-300 hover:bg-ev-100 dark:hover:bg-ev-800',
         size === 'sm' && 'px-3 py-1.5 text-xs',
         size === 'md' && 'px-4 py-2 text-sm',
         size === 'lg' && 'px-6 py-2.5 text-base',

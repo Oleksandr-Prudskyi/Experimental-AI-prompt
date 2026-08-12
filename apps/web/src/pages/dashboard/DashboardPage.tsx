@@ -4,7 +4,7 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { Skeleton } from '@/components/shared/Skeleton';
 import { StatsCard } from './components/StatsCard';
 import { RecentRecords } from './components/RecentRecords';
-import { CategoryBreakdown } from './components/CategoryBreakdown';
+import { AnnouncementsWidget } from './components/AnnouncementsWidget';
 
 export function DashboardPage() {
   const { data, isLoading } = useQuery({
@@ -35,10 +35,10 @@ export function DashboardPage() {
         <>
           {/* region: stat cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <StatsCard icon="chart-bar" label="Záznamy dnes" value={stats.todayRecords ?? 0} color="bg-blue-600" />
-            <StatsCard icon="clock-pause" label="Odstávka dnes (min)" value={stats.totalDowntimeMin ?? 0} color="bg-amber-500" />
-            <StatsCard icon="alert-triangle" label="Stroje v poruše" value={stats.machinesInBreakdown ?? 0} color="bg-red-500" />
-            <StatsCard icon="folder" label="Otevřené záznamy" value={stats.openRecords ?? 0} color="bg-emerald-600" />
+            <StatsCard icon="chart-bar" label="Záznamy dnes" value={stats.todayRecords ?? 0} />
+            <StatsCard icon="clock-pause" label="Odstávka dnes (min)" value={stats.totalDowntimeMin ?? 0} />
+            <StatsCard icon="alert-triangle" label="Stroje v poruše" value={stats.machinesInBreakdown ?? 0} />
+            <StatsCard icon="folder" label="Otevřené záznamy" value={stats.openRecords ?? 0} />
           </div>
           {/* endregion */}
 
@@ -48,10 +48,7 @@ export function DashboardPage() {
               <RecentRecords records={stats.recentRecords || []} />
             </div>
             <div>
-              <CategoryBreakdown
-                records={stats.recentRecords || []}
-                categoryBreakdown={stats.categoryBreakdown}
-              />
+              <AnnouncementsWidget />
             </div>
           </div>
           {/* endregion */}

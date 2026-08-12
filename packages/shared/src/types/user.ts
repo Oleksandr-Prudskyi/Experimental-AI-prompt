@@ -8,8 +8,10 @@ export interface User {
   isActive: boolean;
   roleId: string;
   workshopId: string | null;
+  shiftId: string | null;
   role?: Role;
   workshop?: Workshop;
+  shift?: Shift;
   permissions?: UserPermission[];
   createdAt: string;
   updatedAt: string;
@@ -32,3 +34,4 @@ export interface UserPermission {
 }
 
 import type { Workshop } from './workshop';
+import type { Shift } from './work-record';

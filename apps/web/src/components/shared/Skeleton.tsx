@@ -11,7 +11,7 @@ export function Skeleton({ variant = 'text', width, height, className }: Skeleto
   return (
     <div
       className={cn(
-        'bg-slate-200/60 dark:bg-slate-700/40 animate-shimmer',
+        'bg-ev-200/60 dark:bg-ev-700/40 animate-shimmer',
         variant === 'text' && 'h-4 rounded-md w-full',
         variant === 'card' && 'h-32 rounded-lg w-full',
         variant === 'circle' && 'w-10 h-10 rounded-full',
@@ -21,7 +21,7 @@ export function Skeleton({ variant = 'text', width, height, className }: Skeleto
       style={{
         width: width || undefined,
         height: height || undefined,
-        backgroundImage: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%)',
+        backgroundImage: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 50%, transparent 100%)',
         backgroundSize: '200% 100%',
       }}
     />

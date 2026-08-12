@@ -40,6 +40,14 @@ const ICONS: Record<string, ReactNode> = {
       <path d="M3 8h18" />
     </>
   ),
+  teams: (
+    <>
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </>
+  ),
   shifts: (
     <>
       <circle cx="12" cy="12" r="10" />
@@ -60,6 +68,13 @@ const ICONS: Record<string, ReactNode> = {
       <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
       <line x1="10" y1="11" x2="10" y2="17" />
       <line x1="14" y1="11" x2="14" y2="17" />
+    </>
+  ),
+
+  user: (
+    <>
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
     </>
   ),
 
@@ -130,19 +145,25 @@ const ICONS: Record<string, ReactNode> = {
     </>
   ),
 
+  chat: (
+    <>
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </>
+  ),
+
   // -- Stats --
   'chart-bar': (
     <>
-      <line x1="18" y1="20" x2="18" y2="10" />
-      <line x1="12" y1="20" x2="12" y2="4" />
-      <line x1="6" y1="20" x2="6" y2="14" />
+      <rect x="4" y="12" width="4" height="8" rx="1" />
+      <rect x="10" y="6" width="4" height="14" rx="1" />
+      <rect x="16" y="9" width="4" height="11" rx="1" />
     </>
   ),
   'clock-pause': (
     <>
       <circle cx="12" cy="12" r="10" />
-      <line x1="10" y1="9" x2="10" y2="15" />
-      <line x1="14" y1="9" x2="14" y2="15" />
+      <path d="M12 6v6l3 3" />
+      <line x1="16" y1="16" x2="20" y2="20" />
     </>
   ),
   'alert-triangle': (
@@ -154,7 +175,8 @@ const ICONS: Record<string, ReactNode> = {
   ),
   folder: (
     <>
-      <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+      <path d="M4 4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2H4z" />
+      <path d="M2 10h20" />
     </>
   ),
 
@@ -225,6 +247,11 @@ const ICONS: Record<string, ReactNode> = {
     <>
       <rect x="9" y="9" width="13" height="13" rx="2" />
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+    </>
+  ),
+  shield: (
+    <>
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
     </>
   ),
   spinner: (

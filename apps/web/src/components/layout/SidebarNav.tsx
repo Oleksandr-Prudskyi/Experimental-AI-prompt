@@ -16,11 +16,15 @@ const MAIN_ITEMS: NavItem[] = [
   { label: 'Dashboard', path: '/', icon: 'dashboard' },
   { label: 'Evidence práce', path: '/evidence', icon: 'evidence' },
   { label: 'Stroje', path: '/machines', icon: 'machines' },
+  { label: 'Oznámení', path: '/announcements', icon: 'bell' },
+  { label: 'Chat', path: '/chat', icon: 'chat' },
 ];
 
 const ADMIN_ITEMS: NavItem[] = [
   { label: 'Uživatelé', path: '/admin/users', icon: 'users', permission: PERMISSIONS.USERS_MANAGE },
-  { label: 'Dílny / Týmy', path: '/admin/workshops', icon: 'workshops', permission: PERMISSIONS.WORKSHOPS_MANAGE },
+  { label: 'Oprávnění', path: '/admin/permissions', icon: 'shield', permission: PERMISSIONS.USERS_GRANT_PERMISSIONS },
+  { label: 'Haly', path: '/admin/workshops', icon: 'workshops', permission: PERMISSIONS.WORKSHOPS_MANAGE },
+  { label: 'Týmy', path: '/admin/teams', icon: 'teams', permission: PERMISSIONS.TEAMS_MANAGE },
   { label: 'Směny', path: '/admin/shifts', icon: 'shifts', permission: PERMISSIONS.SETTINGS_MANAGE },
   { label: 'Audit log', path: '/admin/audit', icon: 'audit', permission: PERMISSIONS.AUDIT_VIEW },
   { label: 'Koš', path: '/admin/trash', icon: 'trash', permission: PERMISSIONS.TRASH_RESTORE },
@@ -28,10 +32,10 @@ const ADMIN_ITEMS: NavItem[] = [
 
 const linkClass = (isActive: boolean) =>
   cn(
-    'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-150',
+    'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150',
     isActive
-      ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400'
-      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800',
+      ? 'bg-ev-700/60 text-ev-100 border-l-2 border-petrol-500 -ml-[2px]'
+      : 'text-ev-400 hover:text-ev-200 hover:bg-ev-700/40',
   );
 
 export function SidebarNav() {
@@ -45,11 +49,11 @@ export function SidebarNav() {
   return (
     <nav className="flex flex-col gap-5 px-3 py-4">
       <div className="flex flex-col gap-0.5">
-        <span className="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1">
+        <span className="px-3 text-[10px] font-semibold uppercase tracking-widest text-ev-500 mb-2">
           Hlavní
         </span>
         {MAIN_ITEMS.map((item) => (
-          <NavLink key={item.path} to={item.path} className={({ isActive }) => linkClass(isActive)}>
+          <NavLink key={item.path} to={item.path} end={item.path === '/'} className={({ isActive }) => linkClass(isActive)}>
             <Icon name={item.icon} size={18} />
             {item.label}
           </NavLink>
@@ -60,16 +64,16 @@ export function SidebarNav() {
         <div className="flex flex-col gap-0.5">
           <button
             onClick={toggleAdmin}
-            className="flex items-center justify-between px-3 mb-1 group"
+            className="flex items-center justify-between px-3 mb-2 group"
           >
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-ev-500">
               Správa
             </span>
             <Icon
               name="chevron-down"
               size={14}
               className={cn(
-                'text-slate-400 transition-transform duration-150',
+                'text-ev-500 transition-transform duration-150',
                 adminCollapsed && '-rotate-90',
               )}
             />

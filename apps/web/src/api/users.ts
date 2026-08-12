@@ -1,5 +1,5 @@
 import { api } from './client';
-import type { User, Role, CreateUserInput, UpdateUserInput, ApiResponse } from '@evidence/shared';
+import type { User, Role, UserPermission, CreateUserInput, UpdateUserInput, ApiResponse } from '@evidence/shared';
 
 export const usersApi = {
   list: (params?: { cursor?: string; limit?: number }) =>
@@ -15,4 +15,13 @@ export const usersApi = {
   delete: (id: string) => api.delete(`/users/${id}`),
 
   getRoles: () => api.get<ApiResponse<Role[]>>('/users/roles'),
+
+  getPermissions: (userId: string) =>
+    api.get<ApiResponse<UserPermission[]>>(`/users/${userId}/permissions`),
+
+  grantPermission: (userId: string, permission: string) =>
+    api.post<ApiResponse<UserPermission>>(`/users/${userId}/permissions`, { permission }),
+
+  revokePermission: (userId: string, permissionId: string) =>
+    api.delete(`/users/${userId}/permissions/${permissionId}`),
 };

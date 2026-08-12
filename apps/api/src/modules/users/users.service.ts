@@ -15,7 +15,7 @@ export class UsersService {
       take: limit + 1,
       ...(params.cursor && { cursor: { id: params.cursor }, skip: 1 }),
       orderBy: { createdAt: 'desc' },
-      include: { role: true, workshop: true },
+      include: { role: true, workshop: true, shift: true },
     });
     const hasMore = users.length > limit;
     const data = hasMore ? users.slice(0, limit) : users;
@@ -28,7 +28,7 @@ export class UsersService {
   async findOne(id: string) {
     const user = await this.prisma.user.findFirst({
       where: { id, deletedAt: null },
-      include: { role: true, workshop: true, permissions: true },
+      include: { role: true, workshop: true, shift: true, permissions: true },
     });
     if (!user) throw new NotFoundException('Uživatel nenalezen');
     const { passwordHash, ...safeUser } = user;
@@ -44,10 +44,11 @@ export class UsersService {
         fullName: data.fullName,
         roleId: data.roleId,
         workshopId: data.workshopId,
+        shiftId: data.shiftId,
         phone: data.phone,
         position: data.position,
       },
-      include: { role: true },
+      include: { role: true, shift: true },
     });
     const { passwordHash: _, ...safeUser } = user;
     return safeUser;
@@ -62,10 +63,11 @@ export class UsersService {
         ...(data.fullName && { fullName: data.fullName }),
         ...(data.roleId && { roleId: data.roleId }),
         ...(data.workshopId !== undefined && { workshopId: data.workshopId }),
+        ...(data.shiftId !== undefined && { shiftId: data.shiftId }),
         ...(data.phone !== undefined && { phone: data.phone }),
         ...(data.position !== undefined && { position: data.position }),
       },
-      include: { role: true, workshop: true },
+      include: { role: true, workshop: true, shift: true },
     });
     const { passwordHash, ...safeUser } = user;
     return safeUser;

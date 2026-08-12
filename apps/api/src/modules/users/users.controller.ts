@@ -2,6 +2,7 @@ import { Controller, Get, Post, Patch, Delete, Param, Body, Query, UseGuards } f
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../../common/guards/permissions.guard';
+import { DemoBlockGuard, DemoDeleteBlockGuard } from '../../common/guards/demo.guard';
 import { RequirePermissions } from '../../common/decorators/permissions.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { ZodValidationPipe } from '../../common/pipes/zod-validation.pipe';
@@ -31,6 +32,7 @@ export class UsersController {
 
   @Post()
   @RequirePermissions(PERMISSIONS.USERS_MANAGE)
+  @UseGuards(DemoBlockGuard)
   create(@Body(new ZodValidationPipe(createUserSchema)) body: any) {
     return this.usersService.create(body);
   }
@@ -43,6 +45,7 @@ export class UsersController {
 
   @Delete(':id')
   @RequirePermissions(PERMISSIONS.USERS_MANAGE)
+  @UseGuards(DemoDeleteBlockGuard)
   delete(@Param('id') id: string) {
     return this.usersService.softDelete(id);
   }

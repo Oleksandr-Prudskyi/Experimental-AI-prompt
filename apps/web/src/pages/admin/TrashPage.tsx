@@ -71,22 +71,22 @@ export function TrashPage() {
       ) : (
         groups.map((group: any) => (
           <GlassCard key={group.entityType} hover={false}>
-            <h3 className="text-base font-semibold text-slate-700 dark:text-slate-200 mb-4">
+            <h3 className="text-base font-semibold text-ev-700 dark:text-ev-200 mb-4">
               {entityLabels[group.entityType] || group.entityType}
-              <span className="ml-2 text-sm font-normal text-slate-400">({group.items.length})</span>
+              <span className="ml-2 text-sm font-normal text-ev-400">({group.items.length})</span>
             </h3>
 
-            <div className="flex flex-col divide-y divide-slate-100 dark:divide-slate-700/50">
+            <div className="flex flex-col divide-y divide-ev-100 dark:divide-ev-700/50">
               {group.items.map((item: any) => (
                 <div
                   key={item.id}
                   className="flex items-center justify-between py-3"
                 >
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200 truncate">
+                    <p className="text-sm font-medium text-ev-700 dark:text-ev-200 truncate">
                       {getItemLabel(group.entityType, item)}
                     </p>
-                    <p className="text-xs text-slate-400 tabular-nums">
+                    <p className="text-xs text-ev-400 tabular-nums">
                       Smazáno: {new Date(item.deletedAt).toLocaleString('cs-CZ')}
                     </p>
                   </div>

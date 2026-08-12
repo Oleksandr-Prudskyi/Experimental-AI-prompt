@@ -2,6 +2,7 @@ import { Controller, Get, Post, Patch, Delete, Param, Body, Query, UseGuards } f
 import { WorkRecordsService } from './work-records.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../../common/guards/permissions.guard';
+import { DemoCreateLimitGuard, DemoDeleteBlockGuard } from '../../common/guards/demo.guard';
 import { RequirePermissions } from '../../common/decorators/permissions.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { ZodValidationPipe } from '../../common/pipes/zod-validation.pipe';
@@ -36,6 +37,7 @@ export class WorkRecordsController {
 
   @Post()
   @RequirePermissions(PERMISSIONS.RECORDS_CREATE)
+  @UseGuards(DemoCreateLimitGuard)
   create(
     @Body(new ZodValidationPipe(createWorkRecordSchema)) body: any,
     @CurrentUser('id') authorId: string,
@@ -50,12 +52,14 @@ export class WorkRecordsController {
 
   @Delete(':id')
   @RequirePermissions(PERMISSIONS.RECORDS_DELETE)
+  @UseGuards(DemoDeleteBlockGuard)
   delete(@Param('id') id: string) {
     return this.workRecordsService.softDelete(id);
   }
 
   @Post(':id/duplicate')
   @RequirePermissions(PERMISSIONS.RECORDS_CREATE)
+  @UseGuards(DemoCreateLimitGuard)
   duplicate(@Param('id') id: string, @CurrentUser('id') authorId: string) {
     return this.workRecordsService.duplicate(id, authorId);
   }

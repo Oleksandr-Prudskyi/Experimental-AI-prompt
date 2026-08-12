@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ForbiddenException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
@@ -15,7 +15,7 @@ export class AuthService {
   async validateUser(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
       where: { email },
-      include: { role: true },
+      include: { role: true, workshop: true, shift: true },
     });
     if (!user || !user.isActive || user.deletedAt) {
       throw new UnauthorizedException('Neplatné přihlašovací údaje');
@@ -50,7 +50,7 @@ export class AuthService {
       });
       const user = await this.prisma.user.findUnique({
         where: { id: payload.sub },
-        include: { role: true },
+        include: { role: true, workshop: true, shift: true },
       });
       if (!user || !user.isActive || user.deletedAt) {
         throw new UnauthorizedException('Neplatný token');
@@ -61,12 +61,42 @@ export class AuthService {
     }
   }
 
+  async changePassword(userId: string, currentPassword: string, newPassword: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: { role: true },
+    });
+    if (!user) throw new UnauthorizedException();
+
+    if (user.email === 'demo@evidence.local') {
+      throw new ForbiddenException('Heslo demo účtu nelze změnit');
+    }
+
+    if (user.role?.slug === 'administrator') {
+      throw new ForbiddenException('Heslo administrátora nelze změnit');
+    }
+
+    const valid = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!valid) {
+      throw new BadRequestException('Aktuální heslo je nesprávné');
+    }
+
+    const hash = await bcrypt.hash(newPassword, 10);
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { passwordHash: hash },
+    });
+
+    return { message: 'Heslo bylo úspěšně změněno' };
+  }
+
   async getProfile(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       include: {
         role: true,
         workshop: true,
+        shift: true,
         permissions: true,
       },
     });

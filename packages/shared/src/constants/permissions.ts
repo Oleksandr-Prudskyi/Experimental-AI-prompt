@@ -14,6 +14,7 @@ export const PERMISSIONS = {
   AUDIT_VIEW: 'audit.view',
   SETTINGS_MANAGE: 'settings.manage',
   TRASH_RESTORE: 'trash.restore',
+  WORKERS_TRANSFER: 'workers.transfer',
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
@@ -34,7 +35,9 @@ export const DEFAULT_ROLE_PERMISSIONS: Record<string, Permission[]> = {
     PERMISSIONS.STATISTICS_VIEW_ALL,
     PERMISSIONS.AUDIT_VIEW,
     PERMISSIONS.TRASH_RESTORE,
+    PERMISSIONS.WORKERS_TRANSFER,
   ],
   serizovac: [PERMISSIONS.RECORDS_CREATE],
   vedouci_vyroby: [PERMISSIONS.STATISTICS_VIEW_ALL, PERMISSIONS.REPORTS_GENERATE],
+  obsluha_stroje: [PERMISSIONS.RECORDS_CREATE],
 };

@@ -6,3 +6,5 @@ export type * from './work-record';
 export type * from './comment';
 export type * from './audit-log';
 export type * from './settings';
+export type * from './announcement';
+export type * from './chat';
